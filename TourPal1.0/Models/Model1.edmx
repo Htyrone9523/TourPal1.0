@@ -1,0 +1,388 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Model1StoreContainer">
+    <EntitySet Name="Clients" EntityType="Model1.Store.Clients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Administrators" EntityType="Model1.Store.Administrators" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Activities" EntityType="Model1.Store.Activities" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Groups" EntityType="Model1.Store.Groups" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="preferredPartners" EntityType="Model1.Store.preferredPartners" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ClientActivity" EntityType="Model1.Store.ClientActivity" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ActivityAdministrator" Association="Model1.Store.ActivityAdministrator">
+      <End Role="Activity" EntitySet="Activities" />
+      <End Role="Administrator" EntitySet="Administrators" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientActivity_Client" Association="Model1.Store.FK_ClientActivity_Client">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="ClientActivity" EntitySet="ClientActivity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ClientActivity_Activity" Association="Model1.Store.FK_ClientActivity_Activity">
+      <End Role="Activity" EntitySet="Activities" />
+      <End Role="ClientActivity" EntitySet="ClientActivity" />
+    </AssociationSet>
+    <AssociationSet Name="ClientGroup" Association="Model1.Store.ClientGroup">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="Group" EntitySet="Groups" />
+    </AssociationSet>
+    <AssociationSet Name="ClientpreferredPartner" Association="Model1.Store.ClientpreferredPartner">
+      <End Role="Client" EntitySet="Clients" />
+      <End Role="preferredPartner" EntitySet="preferredPartners" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DateOfBirth" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Occupation" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Destination" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="SelfDescription" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Gender" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GroupId" Type="int" Nullable="true" />
+    <Property Name="Image" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="TimeScheduledToTravel" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Administrators">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DateOfBirth" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Activities">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Destination" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TimeToGo" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BriefDescription" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AdministratorId" Type="int" Nullable="false" />
+    <Property Name="MaximumNumberOfParticipant" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Groups">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Destination" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GroupBuiltDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MenberId1" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="MenberId2" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="preferredPartners">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PartnerId" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ClientId" Type="int" Nullable="false" />
+    <Property Name="ThumbedDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ClientActivity">
+    <Key>
+      <PropertyRef Name="Clients_Id" />
+      <PropertyRef Name="Activities_Id" />
+    </Key>
+    <Property Name="Clients_Id" Type="int" Nullable="false" />
+    <Property Name="Activities_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ActivityAdministrator">
+    <End Role="Activity" Type="Model1.Store.Activities" Multiplicity="*" />
+    <End Role="Administrator" Type="Model1.Store.Administrators" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Administrator">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Activity">
+        <PropertyRef Name="AdministratorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ClientGroup">
+    <End Role="Client" Type="Model1.Store.Clients" Multiplicity="*" />
+    <End Role="Group" Type="Model1.Store.Groups" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Client">
+        <PropertyRef Name="GroupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ClientpreferredPartner">
+    <End Role="Client" Type="Model1.Store.Clients" Multiplicity="1" />
+    <End Role="preferredPartner" Type="Model1.Store.preferredPartners" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="preferredPartner">
+        <PropertyRef Name="ClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientActivity_Client">
+    <End Role="Client" Type="Model1.Store.Clients" Multiplicity="1" />
+    <End Role="ClientActivity" Type="Model1.Store.ClientActivity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Client">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ClientActivity">
+        <PropertyRef Name="Clients_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ClientActivity_Activity">
+    <End Role="ClientActivity" Type="Model1.Store.ClientActivity" Multiplicity="*" />
+    <End Role="Activity" Type="Model1.Store.Activities" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Activity">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ClientActivity">
+        <PropertyRef Name="Activities_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model1" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="Model1Container" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Model1.Client" />
+          <EntitySet Name="Administrators" EntityType="Model1.Administrator" />
+          <EntitySet Name="Activities" EntityType="Model1.Activity" />
+          <AssociationSet Name="ActivityAdministrator" Association="Model1.ActivityAdministrator">
+            <End Role="Activity" EntitySet="Activities" />
+            <End Role="Administrator" EntitySet="Administrators" />
+          </AssociationSet>
+          <AssociationSet Name="ClientActivity" Association="Model1.ClientActivity">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Activity" EntitySet="Activities" />
+          </AssociationSet>
+          <EntitySet Name="Groups" EntityType="Model1.Group" />
+          <AssociationSet Name="ClientGroup" Association="Model1.ClientGroup">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="Group" EntitySet="Groups" />
+          </AssociationSet>
+          <EntitySet Name="preferredPartners" EntityType="Model1.preferredPartner" />
+          <AssociationSet Name="ClientpreferredPartner" Association="Model1.ClientpreferredPartner">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="preferredPartner" EntitySet="preferredPartners" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="DateOfBirth" Type="String" Nullable="false" />
+          <Property Name="Occupation" Type="String" Nullable="true" />
+          <Property Name="Destination" Type="String" Nullable="true" />
+          <Property Name="SelfDescription" Type="String" Nullable="true" />
+          <Property Name="Gender" Type="String" Nullable="false" />
+          <NavigationProperty Name="Activities" Relationship="Model1.ClientActivity" FromRole="Client" ToRole="Activity" />
+          <NavigationProperty Name="Group" Relationship="Model1.ClientGroup" FromRole="Client" ToRole="Group" />
+          <Property Name="GroupId" Type="Int32" Nullable="true" />
+          <Property Name="Image" Type="String" Nullable="true" />
+          <Property Name="TimeScheduledToTravel" Type="String" Nullable="true" />
+          <NavigationProperty Name="preferredPartners" Relationship="Model1.ClientpreferredPartner" FromRole="Client" ToRole="preferredPartner" />
+        </EntityType>
+        <EntityType Name="Administrator">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="DateOfBirth" Type="String" Nullable="false" />
+          <Property Name="Gender" Type="String" Nullable="false" />
+          <NavigationProperty Name="Activities" Relationship="Model1.ActivityAdministrator" FromRole="Administrator" ToRole="Activity" />
+        </EntityType>
+        <EntityType Name="Activity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Destination" Type="String" Nullable="false" />
+          <Property Name="TimeToGo" Type="String" Nullable="false" />
+          <Property Name="BriefDescription" Type="String" Nullable="false" />
+          <NavigationProperty Name="Administrator" Relationship="Model1.ActivityAdministrator" FromRole="Activity" ToRole="Administrator" />
+          <Property Name="AdministratorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Clients" Relationship="Model1.ClientActivity" FromRole="Activity" ToRole="Client" />
+          <Property Name="MaximumNumberOfParticipant" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="ActivityAdministrator">
+          <End Type="Model1.Activity" Role="Activity" Multiplicity="*" />
+          <End Type="Model1.Administrator" Role="Administrator" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Administrator">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Activity">
+              <PropertyRef Name="AdministratorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ClientActivity">
+          <End Type="Model1.Client" Role="Client" Multiplicity="*" />
+          <End Type="Model1.Activity" Role="Activity" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Group">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Destination" Type="String" Nullable="false" />
+          <NavigationProperty Name="Clients" Relationship="Model1.ClientGroup" FromRole="Group" ToRole="Client" />
+          <Property Name="GroupBuiltDate" Type="String" Nullable="false" />
+          <Property Name="MenberId1" Type="String" Nullable="true" />
+          <Property Name="MenberId2" Type="String" Nullable="true" />
+        </EntityType>
+        <Association Name="ClientGroup">
+          <End Type="Model1.Client" Role="Client" Multiplicity="*" />
+          <End Type="Model1.Group" Role="Group" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Group">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Client">
+              <PropertyRef Name="GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="preferredPartner">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartnerId" Type="String" Nullable="true" />
+          <NavigationProperty Name="Client" Relationship="Model1.ClientpreferredPartner" FromRole="preferredPartner" ToRole="Client" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ThumbedDate" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <Association Name="ClientpreferredPartner">
+          <End Type="Model1.Client" Role="Client" Multiplicity="1" />
+          <End Type="Model1.preferredPartner" Role="preferredPartner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="preferredPartner">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Model1StoreContainer" CdmEntityContainer="Model1Container">
+    <EntitySetMapping Name="Clients">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Client)">
+        <MappingFragment StoreEntitySet="Clients">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+          <ScalarProperty Name="Occupation" ColumnName="Occupation" />
+          <ScalarProperty Name="Destination" ColumnName="Destination" />
+          <ScalarProperty Name="SelfDescription" ColumnName="SelfDescription" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="TimeScheduledToTravel" ColumnName="TimeScheduledToTravel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Administrators">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Administrator)">
+        <MappingFragment StoreEntitySet="Administrators">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Activities">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Activity)">
+        <MappingFragment StoreEntitySet="Activities">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Destination" ColumnName="Destination" />
+          <ScalarProperty Name="TimeToGo" ColumnName="TimeToGo" />
+          <ScalarProperty Name="BriefDescription" ColumnName="BriefDescription" />
+          <ScalarProperty Name="AdministratorId" ColumnName="AdministratorId" />
+          <ScalarProperty Name="MaximumNumberOfParticipant" ColumnName="MaximumNumberOfParticipant" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Groups">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.Group)">
+        <MappingFragment StoreEntitySet="Groups">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Destination" ColumnName="Destination" />
+          <ScalarProperty Name="GroupBuiltDate" ColumnName="GroupBuiltDate" />
+          <ScalarProperty Name="MenberId1" ColumnName="MenberId1" />
+          <ScalarProperty Name="MenberId2" ColumnName="MenberId2" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="preferredPartners">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.preferredPartner)">
+        <MappingFragment StoreEntitySet="preferredPartners">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PartnerId" ColumnName="PartnerId" />
+          <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+          <ScalarProperty Name="ThumbedDate" ColumnName="ThumbedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ClientActivity" TypeName="Model1.ClientActivity" StoreEntitySet="ClientActivity">
+      <EndProperty Name="Client">
+        <ScalarProperty Name="Id" ColumnName="Clients_Id" />
+      </EndProperty>
+      <EndProperty Name="Activity">
+        <ScalarProperty Name="Id" ColumnName="Activities_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
